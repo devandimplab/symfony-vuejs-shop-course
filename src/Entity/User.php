@@ -67,6 +67,11 @@ class User implements UserInterface
      */
     private $isDeleted;
 
+    public function __construct()
+    {
+        $this->isDeleted = false;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
