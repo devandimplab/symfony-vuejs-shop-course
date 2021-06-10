@@ -31,7 +31,9 @@
                     Slug
                 </div>
                 <div class="col-md-11">
-                    {{ product.slug }}
+                    {% if product %}
+                        {{ product.slug }}
+                    {% endif %}
                 </div>
             </div>
 
@@ -137,7 +139,7 @@
         </div>
     </div>
 
-    {% if product.id %}
+    {% if product and product.id %}
         {% include 'admin/_embed/_utils/_modal.html.twig' with {
             'modalId': 'approveDeleteModal',
             'modalTitle': 'Are you sure?',
