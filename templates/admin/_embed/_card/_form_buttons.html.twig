@@ -1,0 +1,15 @@
+<div class="d-flex justify-content-between align-items-center">
+    <div>
+        <a href="{{ catalogUrl }}" class="btn btn-default btn-return">
+            <i class="fas fa-arrow-circle-left"></i>
+        </a>
+        <button type="submit" class="btn btn-primary">
+            Save changes
+        </button>
+    </div>
+    {% if entity.id %}
+        <a class="btn btn-white" data-toggle="modal" data-target="#approveDeleteModal">
+            <i class="fas fa-times fa-sm"></i> Delete row
+        </a>
+    {% endif %}
+</div>
