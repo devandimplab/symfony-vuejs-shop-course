@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Main;
 
 use App\Entity\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use App\Form\DTO\EditProductModel;
-use App\Form\EditProductFormType;
+use App\Form\Admin\EditProductFormType;
 use App\Form\Handler\ProductFormHandler;
 use App\Repository\ProductRepository;
 use App\Utils\Manager\ProductManager;
