@@ -72,6 +72,22 @@
         General
     </div>
 
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
+               aria-expanded="true" aria-controls="collapseUsers">
+                <i class="fas fa-fw fa-user"></i>
+                <span>Users</span>
+            </a>
+            <div id="collapseUsers" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="py-2 collapse-inner">
+                    <a class="collapse-item" href="{{ path('admin_user_list') }}">All list</a>
+                    <a class="collapse-item" href="{{ path('admin_user_add') }}">Add new</a>
+                </div>
+            </div>
+        </li>
+    {% endif %}
+
     <hr class="sidebar-divider d-none d-md-block">
 
     <div class="text-center d-none d-md-inline">
