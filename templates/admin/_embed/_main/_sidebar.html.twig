@@ -18,6 +18,20 @@
         Sales
     </div>
 
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrders"
+           aria-expanded="true" aria-controls="collapseOrders">
+            <i class="fas fa-fw fa-credit-card"></i>
+            <span>Orders</span>
+        </a>
+        <div id="collapseOrders" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="py-2 collapse-inner">
+                <a class="collapse-item" href="{{ path('admin_order_list') }}">All list</a>
+                <a class="collapse-item" href="{{ path('admin_order_add') }}">Add new</a>
+            </div>
+        </div>
+    </li>
+
     <hr class="sidebar-divider">
 
     <div class="sidebar-heading">
