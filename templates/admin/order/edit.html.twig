@@ -2,6 +2,10 @@
 
 {% block title_detailed %}Edit Order{% endblock %}
 
+{% block stylesheets %}
+    {{ encore_entry_link_tags('appAdminOrder') }}
+{% endblock %}
+
 {% block body %}
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -81,12 +85,7 @@
                     Products:
                 </div>
                 <div class="col-md-11">
-                    {% for orderProduct in order.orderProducts %}
-                        <div>
-                            {% set product = orderProduct.product %}
-                            #{{ product.id }} - {{ product.title }} - Q: {{ orderProduct.quantity }} - ${{ orderProduct.pricePerOne }}
-                        </div>
-                    {% endfor %}
+                    <div id="app"></div>
                 </div>
             </div>
 
@@ -118,4 +117,18 @@
             'modalBtnText': 'Delete row'
         } %}
     {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        window.staticStore = {}
+        window.staticStore.orderId = "{{ order ? order.id : '' }}";
+        window.staticStore.orderProducts = {{ orderProducts|json_encode|raw }};
+        window.staticStore.urlViewProduct = '{{ path('admin_product_edit_blank') }}';
+        window.staticStore.urlAPICategory = '{{ path('api_categories_get_collection') }}';
+        window.staticStore.urlAPIProduct = '{{ path('api_products_get_collection') }}';
+        window.staticStore.urlAPIOrder = '{{ path('api_orders_get_collection') }}';
+        window.staticStore.urlAPIOrderProduct = '{{ path('api_order_products_get_collection') }}';
+    </script>
+    {{ encore_entry_script_tags('appAdminOrder') }}
 {% endblock %}

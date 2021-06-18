@@ -32,14 +32,14 @@ class Category
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      *
-     * @Groups({"category:list", "category:item", "product:list", "product:item"})
+     * @Groups({"category:list", "category:item", "product:list", "product:item", "order:item"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
      *
-     * @Groups({"category:list", "category:item", "product:list", "product:item"})
+     * @Groups({"category:list", "category:item", "product:list", "product:item", "order:item"})
      */
     private $title;
 
