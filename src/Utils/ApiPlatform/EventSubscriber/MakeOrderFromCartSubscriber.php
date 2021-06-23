@@ -6,7 +6,9 @@ use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Order;
 use App\Entity\StaticStorage\OrderStaticStorage;
 use App\Entity\User;
+use App\Event\OrderCreatedFromCartEvent;
 use App\Utils\Manager\OrderManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
@@ -23,11 +25,16 @@ class MakeOrderFromCartSubscriber implements EventSubscriberInterface
      * @var OrderManager
      */
     private $orderManager;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
-    public function __construct(Security $security, OrderManager $orderManager)
+    public function __construct(Security $security, OrderManager $orderManager, EventDispatcherInterface $eventDispatcher)
     {
         $this->security = $security;
         $this->orderManager = $orderManager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function makeOrder(ViewEvent $event)
@@ -65,12 +72,28 @@ class MakeOrderFromCartSubscriber implements EventSubscriberInterface
         $order->setStatus(OrderStaticStorage::ORDER_STATUS_CREATED);
     }
 
+    public function sendNotificationsAboutNewOrder(ViewEvent $event)
+    {
+        $order = $event->getControllerResult();
+        $method = $event->getRequest()->getMethod();
+
+        if (!$order instanceof Order || Request::METHOD_POST !== $method) {
+            return;
+        }
+
+        $event = new OrderCreatedFromCartEvent($order);
+        $this->eventDispatcher->dispatch($event);
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::VIEW => [
                 [
                     'makeOrder', EventPriorities::PRE_WRITE
+                ],
+                [
+                    'sendNotificationsAboutNewOrder', EventPriorities::POST_WRITE
                 ]
             ]
         ];
