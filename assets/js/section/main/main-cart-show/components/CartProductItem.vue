@@ -74,7 +74,6 @@ export default {
   computed: {
     ...mapState("cart", ["staticStore"]),
     productImage() {
-      console.log(this.cartProduct.product)
       const productImages = this.cartProduct.product.productImages;
 
       return productImages.length ? productImages[0] : null;
