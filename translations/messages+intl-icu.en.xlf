@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en" trgLang="en">
+  <file id="messages.en">
+    <unit id="sMIMdUS" name="user_signup.heading">
+      <segment>
+        <source>user_signup.heading</source>
+        <target>Registration form</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

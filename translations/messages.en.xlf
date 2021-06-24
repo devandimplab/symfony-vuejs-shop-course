@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en" trgLang="en">
+  <file id="messages.en">
+    <unit id="Ffjdnsj" name="label.enter_your_email">
+      <segment>
+        <source>label.enter_your_email</source>
+        <target>Enter your email</target>
+      </segment>
+    </unit>
+    <unit id="Fe2zEyl" name="Please enter your email">
+      <segment>
+        <source>Please enter your email</source>
+        <target>Please enter your email</target>
+      </segment>
+    </unit>
+    <unit id="wGv5ZwF" name="Enter your password">
+      <segment>
+        <source>Enter your password</source>
+        <target>Enter your password</target>
+      </segment>
+    </unit>
+    <unit id="qrkWoYx" name="I agree to the &lt;a href=&quot;#&quot;&gt;privacy policy&lt;/a&gt; *">
+      <segment>
+        <source>I agree to the &lt;a href="#"&gt;privacy policy&lt;/a&gt; *</source>
+        <target><![CDATA[I agree to the <a href="#">privacy policy</a> *]]></target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

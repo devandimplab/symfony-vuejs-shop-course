@@ -28,6 +28,20 @@
                     </ul>
                 </div>
                 <div class="col-sm-12 mt-3">
+                    <h4 class="widget-title">Change language</h4>
+                    <ul class="widget-list">
+                        <li>
+                            <a href="{{ path('main_homepage', {_locale: 'en'}) }}">{{ 'en'|locale_name('en')|capitalize }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('main_homepage', {_locale: 'fr'}) }}">{{ 'fr'|locale_name('fr')|capitalize }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('main_homepage', {_locale: 'ru'}) }}">{{ 'ru'|locale_name('ru')|capitalize }}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-12 mt-3">
                     <p class="widget-copyright">Copyright © RankedChoice Team. All Rights Reserved.</p>
                 </div>
             </div>

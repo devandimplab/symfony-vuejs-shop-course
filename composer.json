@@ -19,6 +19,7 @@
         "league/oauth2-facebook": "^2.0",
         "league/oauth2-google": "^4.0",
         "nelmio/cors-bundle": "^2.1",
+        "php-translation/symfony-bundle": "^0.12.1",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.1",
         "stof/doctrine-extensions-bundle": "^1.6",
