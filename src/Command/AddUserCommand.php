@@ -49,7 +49,7 @@ class AddUserCommand extends Command
             ->setDescription(self::$defaultDescription)
             ->addOption('email', 'em', InputArgument::OPTIONAL, 'Email')
             ->addOption('password', 'p', InputArgument::OPTIONAL, 'Password')
-            ->addOption('isAdmin', '', InputArgument::OPTIONAL, 'If set the user is created as an administrator', false)
+            ->addOption('role', '', InputArgument::OPTIONAL, 'Set role')
         ;
     }
 
@@ -61,7 +61,7 @@ class AddUserCommand extends Command
 
         $email = $input->getOption('email');
         $password = $input->getOption('password');
-        $isAdmin = $input->getOption('isAdmin');
+        $role = $input->getOption('role');
 
         $io->title('Add User Command Wizard');
         $io->text([
@@ -76,15 +76,12 @@ class AddUserCommand extends Command
             $password = $io->askHidden('Password (your type will be hidden)');
         }
 
-        if (!$isAdmin) {
-            $question = new Question('Is admin? (1 or 0)', 0);
-            $isAdmin = $io->askQuestion($question);
+        if (!$role) {
+            $role = $io->ask('Set role');
         }
 
-        $isAdmin = boolval($isAdmin);
-
         try {
-            $user = $this->createUser($email, $password, $isAdmin);
+            $user = $this->createUser($email, $password, $role);
         } catch (RuntimeException $exception) {
             $io->comment($exception->getMessage());
 
@@ -92,7 +89,7 @@ class AddUserCommand extends Command
         }
 
         $successMessage = sprintf('%s was successfully created: %s',
-            $isAdmin ? 'Administrator user' : 'User',
+            $role,
             $email
         );
         $io->success($successMessage);
@@ -111,10 +108,10 @@ class AddUserCommand extends Command
     /**
      * @param string $email
      * @param string $password
-     * @param bool $isAdmin
+     * @param string $role
      * @return User
      */
-    private function createUser(string $email, string $password, bool $isAdmin): User
+    private function createUser(string $email, string $password, string $role): User
     {
         $existingUser = $this->userRepository->findOneBy(['email' => $email]);
 
@@ -124,7 +121,7 @@ class AddUserCommand extends Command
 
         $user = new User();
         $user->setEmail($email);
-        $user->setRoles([$isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER']);
+        $user->setRoles([$role]);
 
         $encodedPassword = $this->encoder->encodePassword($user, $password);
         $user->setPassword($encodedPassword);

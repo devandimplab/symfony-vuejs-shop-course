@@ -35,6 +35,9 @@ security:
             guard:
                 authenticators:
                     - App\Security\Authenticator\Main\LoginFormAuthenticator
+                    - App\Security\Authenticator\Main\FacebookAuthenticator
+                    - App\Security\Authenticator\Main\GoogleAuthenticator
+                entry_point: App\Security\Authenticator\Main\LoginFormAuthenticator
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800 # 1 week

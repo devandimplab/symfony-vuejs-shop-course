@@ -1,0 +1,29 @@
+{% extends 'main/email/base.html.twig' %}
+
+{% block content %}
+    <row>
+        <columns>
+            <spacer size="35"></spacer>
+            <center>
+                <h1>Ranked Choice Shop - Your new password</h1>
+            </center>
+            <spacer size="10"></spacer>
+        </columns>
+    </row>
+    <row>
+        <columns>
+            <p>
+                Hello, {{ user.fullName }}! <br/><br/>
+                To login into your profile use this new password: <br/><br/>
+                <strong>{{ plainPassword }}</strong>
+            </p>
+        </columns>
+    </row>
+    <row>
+        <columns>
+            <a href="{{ profileUrl }}" target="_blank">
+                Visit our homepage.
+            </a>
+        </columns>
+    </row>
+{% endblock %}

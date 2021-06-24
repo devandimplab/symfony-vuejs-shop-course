@@ -20,6 +20,8 @@
                         <th>Role</th>
                         <th>Profile info</th>
                         <th>Is verified email</th>
+                        <th>From facebook</th>
+                        <th>From google</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -54,6 +56,8 @@
                                         not verified
                                     {% endif %}
                                 </td>
+                                <td>{% if user.facebookId %}+{% endif %}</td>
+                                <td>{% if user.googleId %}+{% endif %}</td>
                                 <td>
                                     <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn btn-outline-info">Edit</a>
                                 </td>
