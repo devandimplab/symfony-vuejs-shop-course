@@ -4,12 +4,14 @@ namespace App\Controller\Main;
 
 use App\Entity\User;
 use App\Form\Main\RegistrationFormType;
+use App\Messenger\Message\Event\UserRegisteredEvent;
 use App\Security\Verifier\EmailVerifier;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -31,7 +33,7 @@ class RegistrationController extends AbstractController
      *  "ru": "/registration",
      *     }, name="main_registration")
      */
-    public function registration(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function registration(Request $request, UserPasswordEncoderInterface $passwordEncoder, MessageBusInterface $messageBus): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('main_profile_index');
@@ -54,15 +56,9 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('main_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('robot@ranked-choice.com', 'Robot'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('main/email/security/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
+            $event = new UserRegisteredEvent($user->getId());
+            $messageBus->dispatch($event);
+
             $this->addFlash('success', 'An email has been sent. Please check your inbox to complete registration.');
 
             return $this->redirectToRoute('main_homepage');
