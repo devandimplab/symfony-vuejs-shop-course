@@ -4,41 +4,51 @@
     </button>
     <nav class="mobile-nav">
         <ul class="mobile-menu">
-            <li class="menu-item">
-                <a href="#">
-                    <div>Jeans</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#">
-                    <div>Hats</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#">
-                    <div>Jackets</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#">
-                    <div>Dresses</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#">
-                    <div>Sneakers</div>
-                </a>
-            </li>
-            <li class="menu-item font-weight-bold">
-                <a href="{{ path('main_login') }}">
-                    <div>Login</div>
-                </a>
-            </li>
-            <li class="menu-item font-weight-bold">
-                <a href="#">
-                    <div>Cart</div>
-                </a>
-            </li>
+            {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                'targetRoute': 'main_category_show',
+                'slug': 'jeans',
+                'label': 'Jeans'
+            } %}
+            {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                'targetRoute': 'main_category_show',
+                'slug': 'hats',
+                'label': 'Hats'
+            } %}
+            {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                'targetRoute': 'main_category_show',
+                'slug': 'jackets',
+                'label': 'Jackets'
+            } %}
+            {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                'targetRoute': 'main_category_show',
+                'slug': 'dresses',
+                'label': 'Dresses'
+            } %}
+            {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                'targetRoute': 'main_category_show',
+                'slug': 'sneakers',
+                'label': 'Sneakers'
+            } %}
+
+            {% if app.user %}
+                {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                    'targetRoute': 'main_profile_index',
+                    'isBold': 1,
+                    'label': 'My profile'
+                } %}
+            {% else %}
+                {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                    'targetRoute': 'main_login',
+                    'isBold': 1,
+                    'label': 'Login'
+                } %}
+            {% endif %}
+
+            {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                'targetRoute': 'main_cart_show',
+                'isBold': 1,
+                'label': 'Cart'
+            } %}
         </ul>
     </nav>
 </div>

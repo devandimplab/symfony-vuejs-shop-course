@@ -6,6 +6,8 @@ use App\Entity\Order;
 use App\Entity\OrderProduct;
 use App\Entity\StaticStorage\OrderStaticStorage;
 use App\Form\Admin\EditOrderFormType;
+use App\Form\Admin\FilterType\OrderFilterFormType;
+use App\Form\DTO\EditOrderModel;
 use App\Form\Handler\OrderFormHandler;
 use App\Repository\OrderRepository;
 use App\Utils\Manager\OrderManager;
@@ -22,13 +24,18 @@ class OrderController extends AbstractController
     /**
      * @Route("/list", name="list")
      */
-    public function list(OrderRepository $orderRepository): Response
+    public function list(Request $request, OrderFormHandler $orderFormHandler): Response
     {
-        $orders = $orderRepository->findBy(['isDeleted' => false], ['id' => 'DESC']);
+        $model = new EditOrderModel();
+        $filterForm = $this->createForm(OrderFilterFormType::class, $model);
+        $filterForm->handleRequest($request);
+
+        $pagination = $orderFormHandler->processOrderFiltersForm($request, $filterForm);
 
         return $this->render('admin/order/list.html.twig', [
-            'orders' => $orders,
-            'orderStatusChoices' => OrderStaticStorage::getOrderStatusChoices()
+            'pagination' => $pagination,
+            'orderStatusChoices' => OrderStaticStorage::getOrderStatusChoices(),
+            'form' => $filterForm->createView()
         ]);
     }
 

@@ -14,7 +14,7 @@
 
 <body>
 <div class="page-wrapper">
-
+    {% set ROUTE_NAME = app.request.attributes.get('_route') %}
     {% include 'main/_embed/_header.html.twig' %}
 
     <main class="main">

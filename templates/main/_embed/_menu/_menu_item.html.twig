@@ -1,0 +1,34 @@
+{% if slug is not defined %}
+    {% set slug = '' %}
+{% endif %}
+
+{% if isBold is not defined %}
+    {% set isBold = 0 %}
+{% endif %}
+
+{% set url = 'main_homepage' %}
+{% set isActiveItem = 0 %}
+
+{% if ROUTE_NAME == 'main_category_show' %}
+    {% set isActiveItem = (app.request.attributes.get('slug') == slug) %}
+{% elseif ROUTE_NAME == 'main_product_show' %}
+    {% set isActiveItem = (app.request.attributes.get('product')
+        and app.request.attributes.get('product').category.slug == slug) %}
+{% else %}
+    {% set isActiveItem = (ROUTE_NAME == targetRoute) %}
+{% endif %}
+
+{% if targetRoute == 'main_category_show' %}
+    {% set url = path('main_category_show', {'slug': slug}) %}
+{% else %}
+    {% set url = path(targetRoute) %}
+{% endif %}
+
+<li class="menu-item
+    {% if isBold %}font-weight-bold{% endif %}
+    {% if isActiveItem %}active{% endif %}
+">
+    <a href="{{ url }}">
+        <div>{{ label }}</div>
+    </a>
+</li>
