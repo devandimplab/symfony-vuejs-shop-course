@@ -53,6 +53,6 @@ jobs:
       - run:
           name: Start Selenium
           command: java -jar selenium-server-standalone-3.141.59.jar
-          background: java
+          background: true
 
       - run: make run-test
