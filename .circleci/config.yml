@@ -20,6 +20,10 @@ jobs:
           command: mv .env.test .env
 
       - run:
+          name: "Install npm 7.15.0"
+          command: npm install -g npm@7.15.0
+
+      - run:
           name: "Install dependencies"
           command: composer install -n --prefer-dist
 
