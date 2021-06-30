@@ -1,0 +1,56 @@
+{
+  "entrypoints": {
+    "section-main": {
+      "js": [
+        "/build/runtime.24085de5.js",
+        "/build/section-main.7aefb257.js"
+      ],
+      "css": [
+        "/build/section-main.eda2c7d6.css"
+      ]
+    },
+    "section-admin": {
+      "js": [
+        "/build/runtime.24085de5.js",
+        "/build/86.554d4d28.js",
+        "/build/104.f5f92571.js",
+        "/build/section-admin.7b8e602a.js"
+      ],
+      "css": [
+        "/build/section-admin.effc4a58.css"
+      ]
+    },
+    "appAdminOrder": {
+      "js": [
+        "/build/runtime.24085de5.js",
+        "/build/86.554d4d28.js",
+        "/build/255.ff6ab00e.js",
+        "/build/appAdminOrder.4f7d69a3.js"
+      ]
+    },
+    "appMainCartShow": {
+      "js": [
+        "/build/runtime.24085de5.js",
+        "/build/86.554d4d28.js",
+        "/build/255.ff6ab00e.js",
+        "/build/appMainCartShow.72761037.js"
+      ]
+    },
+    "appMainMenuCart": {
+      "js": [
+        "/build/runtime.24085de5.js",
+        "/build/86.554d4d28.js",
+        "/build/255.ff6ab00e.js",
+        "/build/appMainMenuCart.6df87573.js"
+      ]
+    },
+    "email": {
+      "js": [
+        "/build/runtime.24085de5.js"
+      ],
+      "css": [
+        "/build/email.63096877.css"
+      ]
+    }
+  }
+}
