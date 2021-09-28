@@ -13,7 +13,15 @@ class UserStaticStorage
         return [
             self::USER_ROLE_USER => 'User',
             self::USER_ROLE_ADMIN => 'Admin',
-            self::USER_ROLE_SUPER_ADMIN => 'Super Admin'
+            self::USER_ROLE_SUPER_ADMIN => 'Super Admin',
+        ];
+    }
+
+    public static function getUserRoleHasAccessToAdminSection(): array
+    {
+        return [
+            self::USER_ROLE_ADMIN,
+            self::USER_ROLE_SUPER_ADMIN,
         ];
     }
 }

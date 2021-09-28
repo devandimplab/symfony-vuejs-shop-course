@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\StaticStorage\UserStaticStorage;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -134,6 +135,24 @@ class User implements UserInterface
         $this->roles = $roles;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAccessToAdminSection(): bool
+    {
+        $hasAccess = false;
+
+        foreach ($this->getRoles() as $role) {
+            if ($hasAccess) {
+                continue;
+            }
+
+            $hasAccess = in_array($role, UserStaticStorage::getUserRoleHasAccessToAdminSection());
+        }
+
+        return $hasAccess;
     }
 
     /**

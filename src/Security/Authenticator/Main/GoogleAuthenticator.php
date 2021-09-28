@@ -2,17 +2,12 @@
 
 namespace App\Security\Authenticator\Main;
 
-use App\Entity\User;
 use App\Event\UserLoggedInViaSocialNetworkEvent;
 use App\Utils\Factory\UserFactory;
 use App\Utils\Generator\PasswordGenerator;
 use App\Utils\Manager\UserManager;
-use Doctrine\ORM\EntityManagerInterface;
-use KnpU\OAuth2ClientBundle\Client\Provider\GoogleClient;
-use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
-use KnpU\OAuth2ClientBundle\Client\Provider\FacebookClient;
+use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use League\OAuth2\Client\Provider\FacebookUser;
 use League\OAuth2\Client\Provider\GoogleUser;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -22,21 +17,32 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
-class GoogleAuthenticator extends SocialAuthenticator
+class GoogleAuthenticator extends OAuth2Authenticator
 {
+    /**
+     * @var ClientRegistry
+     */
     private $clientRegistry;
 
+    /**
+     * @var RouterInterface
+     */
     private $router;
+
     /**
      * @var UserManager
      */
     private $userManager;
+
     /**
      * @var SessionInterface
      */
     private $session;
+
     /**
      * @var EventDispatcherInterface
      */
@@ -51,74 +57,72 @@ class GoogleAuthenticator extends SocialAuthenticator
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function supports(Request $request)
+    /**
+     * @param Request $request
+     * @return bool|null
+     */
+    public function supports(Request $request): ?bool
     {
         // continue ONLY if the current ROUTE matches the check ROUTE
-        return $request->attributes->get('_route') === 'connect_google_check';
-    }
-
-    public function getCredentials(Request $request)
-    {
-        // this method is only called if supports() returns true
-
-        // For Symfony lower than 3.4 the supports method need to be called manually here:
-        // if (!$this->supports($request)) {
-        //     return null;
-        // }
-
-        return $this->fetchAccessToken($this->getGoogleClient());
-    }
-
-    public function getUser($credentials, UserProviderInterface $userProvider)
-    {
-        /** @var GoogleUser $googleUser */
-        $googleUser = $this->getGoogleClient()
-            ->fetchUserFromToken($credentials);
-
-        $email = $googleUser->getEmail();
-
-        // 1) have they logged in with Facebook before? Easy!
-        $existingUser = $this->userManager->getRepository()->findOneBy(['googleId' => $googleUser->getId()]);
-
-        if ($existingUser) {
-            return $existingUser;
-        }
-
-        // 2) do we have a matching user by email?
-        $user = $this->userManager->getRepository()->findOneBy(['email' => $email]);
-
-        if (!$user) {
-            $user = UserFactory::createUserFromGoogleUser($googleUser);
-
-            $plainPassword = PasswordGenerator::generatePassword();
-            $this->userManager->encodePassword($user, $plainPassword);
-
-            $event = new UserLoggedInViaSocialNetworkEvent($user, $plainPassword);
-            $this->eventDispatcher->dispatch($event);
-
-            $this->session->getFlashBag()->add('success', 'An email has been sent. Please check your inbox to find password');
-            $this->userManager->save($user);
-        }
-
-        // 3) Maybe you just want to "register" them by creating
-        // a User object
-        $user->setGoogleId($googleUser->getId());
-        $this->userManager->save($user);
-
-        return $user;
+        return 'connect_google_check' === $request->attributes->get('_route');
     }
 
     /**
-     * @return GoogleClient
+     * @param Request $request
+     * @return PassportInterface
      */
-    private function getGoogleClient()
+    public function authenticate(Request $request): PassportInterface
     {
-        return $this->clientRegistry
-            // "google_main" is the key used in config/packages/knpu_oauth2_client.yaml
-            ->getClient('google_main');
+        $client = $this->clientRegistry->getClient('google_main');
+        $accessToken = $this->fetchAccessToken($client);
+
+        return new SelfValidatingPassport(
+            new UserBadge($accessToken->getToken(), function () use ($accessToken, $client) {
+                /** @var GoogleUser $googleUser */
+                $googleUser = $client->fetchUserFromToken($accessToken);
+
+                $email = $googleUser->getEmail();
+
+                // 1) have they logged in with Facebook before? Easy!
+                $existingUser = $this->userManager->getRepository()->findOneBy(['googleId' => $googleUser->getId()]);
+
+                if ($existingUser) {
+                    return $existingUser;
+                }
+
+                // 2) do we have a matching user by email?
+                $user = $this->userManager->getRepository()->findOneBy(['email' => $email]);
+
+                if (!$user) {
+                    $user = UserFactory::createUserFromGoogleUser($googleUser);
+
+                    $plainPassword = PasswordGenerator::generatePassword();
+                    $this->userManager->encodePassword($user, $plainPassword);
+
+                    $event = new UserLoggedInViaSocialNetworkEvent($user, $plainPassword);
+                    $this->eventDispatcher->dispatch($event);
+
+                    $this->session->getFlashBag()->add('success', 'An email has been sent. Please check your inbox to find password');
+                    $this->userManager->save($user);
+                }
+
+                // 3) Maybe you just want to "register" them by creating
+                // a User object
+                $user->setGoogleId($googleUser->getId());
+                $this->userManager->save($user);
+
+                return $user;
+            })
+        );
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    /**
+     * @param Request $request
+     * @param TokenInterface $token
+     * @param string $firewallName
+     * @return Response|null
+     */
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         // change "app_homepage" to some route in your app
         $targetUrl = $this->router->generate('main_profile_index');
@@ -129,24 +133,15 @@ class GoogleAuthenticator extends SocialAuthenticator
         //return null;
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    /**
+     * @param Request $request
+     * @param AuthenticationException $exception
+     * @return Response|null
+     */
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         $message = strtr($exception->getMessageKey(), $exception->getMessageData());
 
         return new Response($message, Response::HTTP_FORBIDDEN);
     }
-
-    /**
-     * Called when authentication is needed, but it's not sent.
-     * This redirects to the 'login'.
-     */
-    public function start(Request $request, AuthenticationException $authException = null)
-    {
-        return new RedirectResponse(
-            '/connect/', // might be the site, where users choose their oauth provider
-            Response::HTTP_TEMPORARY_REDIRECT
-        );
-    }
-
-    // ...
 }
