@@ -21,13 +21,16 @@ class ImageResizer
      * @param string $originalFileFolder
      * @param string $originalFilename
      * @param array $targetParams
-     * @return string
+     * @return string|null
      */
-    public function resizeImageAndSave(string $originalFileFolder, string $originalFilename, array $targetParams): string
+    public function resizeImageAndSave(string $originalFileFolder, string $originalFilename, array $targetParams): ?string
     {
         $originalFilePath = $originalFileFolder.'/'.$originalFilename;
 
         list($imageWidth, $imageHeight) = getimagesize($originalFilePath);
+        if (!$imageHeight) {
+            return null;
+        }
 
         $ratio = $imageWidth / $imageHeight;
         $targetWidth = $targetParams['width'];

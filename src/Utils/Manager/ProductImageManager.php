@@ -80,6 +80,10 @@ class ProductImageManager extends AbstractBaseManager
         ];
         $imageBig = $this->imageResizer->resizeImageAndSave($this->uploadsTempDir, $tempImageFilename, $imageBigParams);
 
+        if (!$imageSmall || !$imageMiddle || !$imageBig) {
+            return null;
+        }
+
         $productImage = new ProductImage();
         $productImage->setFilenameSmall($imageSmall);
         $productImage->setFilenameMiddle($imageMiddle);
