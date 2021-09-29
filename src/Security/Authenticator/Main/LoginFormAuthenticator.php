@@ -62,9 +62,7 @@ class LoginFormAuthenticator extends AbstractAuthenticator
         $request->getSession()->set(Security::LAST_USERNAME, $email);
 
         return new Passport(
-            new UserBadge($email, function ($userIdentifier) {
-                return $this->userRepository->findOneBy(['email' => $userIdentifier]);
-            }),
+            new UserBadge($email),
             new PasswordCredentials($plaintextPassword),
             [
                 new RememberMeBadge()
@@ -94,6 +92,10 @@ class LoginFormAuthenticator extends AbstractAuthenticator
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
+        if ($request->hasSession()) {
+            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+        }
+
         return null;
     }
 }

@@ -61,11 +61,14 @@ class LoginFormAuthenticator extends AbstractAuthenticator
 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
 
+        $user = $this->userRepository->findOneBy(['email' => $email]);
+
+        if ($user && !$user->hasAccessToAdminSection()) {
+            $email = '';
+        }
+
         return new Passport(
-            new UserBadge($email, function ($userIdentifier) {
-                $user = $this->userRepository->findOneBy(['email' => $userIdentifier]);
-                return $user->hasAccessToAdminSection() ? $user : null;
-            }),
+            new UserBadge($email),
             new PasswordCredentials($plaintextPassword),
             [
                 new RememberMeBadge()
@@ -95,6 +98,10 @@ class LoginFormAuthenticator extends AbstractAuthenticator
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
+        if ($request->hasSession()) {
+            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+        }
+
         return null;
     }
 }
