@@ -61,8 +61,10 @@ class ProductManager extends AbstractBaseManager
         $productDir = $this->getProductImagesDir($product);
 
         $productImage = $this->productImageManager->saveImageForProduct($productDir, $tempImageFilename);
-        $productImage->setProduct($product);
-        $product->addProductImage($productImage);
+        if ($productImage) {
+            $productImage->setProduct($product);
+            $product->addProductImage($productImage);
+        }
 
         return $product;
     }
