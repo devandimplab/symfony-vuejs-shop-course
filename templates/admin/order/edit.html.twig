@@ -85,7 +85,13 @@
                     Products:
                 </div>
                 <div class="col-md-11">
-                    <div id="app"></div>
+                    {% if order.id %}
+                        <div id="app"></div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            To add products, first click "Save Changes".
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
