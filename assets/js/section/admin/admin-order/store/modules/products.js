@@ -75,7 +75,7 @@ const actions = {
     async addNewOrderProduct({ state, dispatch }) {
         const url = state.staticStore.url.apiOrderProduct;
         const data = {
-            pricePerOne: state.newOrderProduct.pricePerOne,
+            pricePerOne: state.newOrderProduct.pricePerOne.toString(),
             quantity: parseInt(state.newOrderProduct.quantity),
             product: "/api/products/" + state.newOrderProduct.productId,
             appOrder: "/api/orders/" + state.staticStore.orderId
