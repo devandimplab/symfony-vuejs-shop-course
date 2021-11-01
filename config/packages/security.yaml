@@ -19,6 +19,7 @@ security:
             anonymous: true
             lazy: true
             provider: app_user_provider
+            context: website
             guard:
                 authenticators:
                     - App\Security\Authenticator\Admin\LoginFormAuthenticator
@@ -32,6 +33,7 @@ security:
             anonymous: true
             lazy: true
             provider: app_user_provider
+            context: website
             guard:
                 authenticators:
                     - App\Security\Authenticator\Main\LoginFormAuthenticator
