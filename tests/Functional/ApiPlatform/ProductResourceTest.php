@@ -52,7 +52,7 @@ class ProductResourceTest extends ResourceTestUtils
 
         $user = self::$container->get(UserRepository::class)->findOneBy(['email' => UserFixtures::USER_ADMIN_1_EMAIL]);
 
-        $client->loginUser($user, 'main');
+        $client->loginUser($user, 'website');
 
         $context = [
             'title' => 'New Product',
@@ -78,7 +78,7 @@ class ProductResourceTest extends ResourceTestUtils
 
         $user = self::$container->get(UserRepository::class)->findOneBy(['email' => UserFixtures::USER_ADMIN_1_EMAIL]);
 
-        $client->loginUser($user, 'main');
+        $client->loginUser($user, 'website');
 
         $context = [
             'title' => 'Updated Product',
