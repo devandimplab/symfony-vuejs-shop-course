@@ -109,7 +109,7 @@ export default {
       } else if (value > maxValue) {
         updatedValue = maxValue;
       }
-      console.log(this.$data)
+
       this.$data[field] = updatedValue;
     },
     updateQuantity() {
