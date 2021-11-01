@@ -29,7 +29,7 @@ class ResourceTestUtils extends WebTestCase
     {
         $user = self::$container->get(UserRepository::class)->findOneBy(['email' => UserFixtures::USER_1_EMAIL]);
 
-        $client->loginUser($user, 'main');
+        $client->loginUser($user, 'website');
 
         $client->request($method, $uri, [], [], self::REQUEST_HEADERS, json_encode([]));
 
