@@ -109,7 +109,8 @@ export default {
       } else if (value > maxValue) {
         updatedValue = maxValue;
       }
-      this[field] = updatedValue;
+      console.log(this.$data)
+      this.$data[field] = updatedValue;
     },
     updateQuantity() {
       const payload = {
