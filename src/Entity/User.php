@@ -129,6 +129,24 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @return bool
+     */
+    public function isAdminRole(): bool
+    {
+        $isAdmin = false;
+
+        foreach ($this->roles as $role) {
+            if ($isAdmin) {
+                continue;
+            }
+
+            $isAdmin = in_array($role, ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN']);
+        }
+
+        return $isAdmin;
+    }
+
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;

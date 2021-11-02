@@ -15,17 +15,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "normalization_context"={"groups"="cart_product:list"}
  *          },
  *          "post"={
- *              "security"="is_granted('ROLE_ADMIN')",
- *              "normalization_context"={"groups"="cart_product:list:write"}
+ *              "normalization_context"={"groups"="cart_product:list:write"},
+ *              "security_post_denormalize"="is_granted('CART_PRODUCT_EDIT', object)"
  *          }
  *     },
  *     itemOperations={
  *         "get"={
- *              "normalization_context"={"groups"="cart_product:item"}
+ *              "normalization_context"={"groups"="cart_product:item"},
+ *              "security"="is_granted('CART_PRODUCT_READ', object)"
  *          },
  *          "delete"={
+ *              "security"="is_granted('CART_PRODUCT_DELETE', object)"
  *          },
  *          "patch"={
+ *              "security_post_denormalize"="is_granted('CART_PRODUCT_EDIT', object)"
  *          }
  *      }
  * )
