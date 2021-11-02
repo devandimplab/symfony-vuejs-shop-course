@@ -29,7 +29,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          "delete"={
  *              "security"="is_granted('CART_DELETE', object)"
  *          },
- *      }
+ *      },
+ *     order={
+ *          "id"="DESC"
+ *     },
  * )
  */
 class Cart
