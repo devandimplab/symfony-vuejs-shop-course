@@ -39,9 +39,9 @@
                                         type="number"
                                         id="product_full_filter_quantity"
                                         class="form-control"
-                                        value="{{ product.quantity }}"
+                                        value="1"
                                         min="1"
-                                        max="10"
+                                        max="{{ product.quantity }}"
                                         step="1"
                                         data-decimals="0"
                                         required
@@ -79,6 +79,17 @@
     <script>
         const productUuid = '{{ product.uuid }}';
         const productQuantityEl = document.getElementById('product_full_filter_quantity');
+
+        productQuantityEl.addEventListener('focusout', function (event) {
+            event.preventDefault();
+
+            const maxQuantity = parseInt({{ product.quantity }});
+            const selectedQuantity = parseInt(event.target.value);
+
+            if (selectedQuantity > maxQuantity) {
+                productQuantityEl.value = maxQuantity.toString();
+            }
+        });
 
         function addProductToCart() {
             const quantity = parseInt(productQuantityEl.value);
