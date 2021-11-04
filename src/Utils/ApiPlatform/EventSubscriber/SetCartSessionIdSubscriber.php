@@ -4,6 +4,7 @@ namespace App\Utils\ApiPlatform\EventSubscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Cart;
+use App\Utils\Generator\TokenGenerator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
@@ -20,13 +21,14 @@ class SetCartSessionIdSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $phpSessionId = $event->getRequest()->cookies->get('PHPSESSID');
+        $cartToken = $event->getRequest()->cookies->get('CART_TOKEN');
 
-        if (!$phpSessionId) {
-            return;
+        if (!$cartToken) {
+            $cartToken = TokenGenerator::generateToken();
         }
 
-        $cart->setSessionId($phpSessionId);
+        $cart->setToken($cartToken);
+        dd($event->getResponse(), $cart);
     }
 
     public static function getSubscribedEvents()

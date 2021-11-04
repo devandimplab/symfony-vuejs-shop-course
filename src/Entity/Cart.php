@@ -47,11 +47,18 @@ class Cart
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @Groups({"cart:list", "cart:item"})
      */
-    private $sessionId;
+    private $token;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="orders")
+     *
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $owner;
 
     /**
      * @ORM\Column(type="datetime")
@@ -76,14 +83,14 @@ class Cart
         return $this->id;
     }
 
-    public function getSessionId(): ?string
+    public function getOwner(): ?User
     {
-        return $this->sessionId;
+        return $this->owner;
     }
 
-    public function setSessionId(string $sessionId): self
+    public function setOwner(?User $owner): self
     {
-        $this->sessionId = $sessionId;
+        $this->owner = $owner;
 
         return $this;
     }
@@ -96,6 +103,18 @@ class Cart
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }
