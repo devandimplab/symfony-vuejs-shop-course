@@ -47,8 +47,6 @@ const actions = {
             && result.status === StatusCodes.OK
         ) {
             commit('setCart', result.data["hydra:member"][0]);
-        } else {
-            dispatch('createCart');
         }
     },
     async cleanCart({ state, commit }) {
@@ -76,7 +74,11 @@ const actions = {
             dispatch('getCart');
         }
     },
-    addCartProduct({ state, dispatch }, productData) {
+    async addCartProduct({ state, dispatch }, productData) {
+        if (!state.cart.cartProducts) {
+            await dispatch('createCart');
+        }
+
         if (!productData.quantity) {
             productData.quantity = 1;
         }
@@ -109,7 +111,7 @@ const actions = {
         if (result.data && result.status === StatusCodes.CREATED) {
             // устанавливаем срок жизни 1 день
             setCookie('CART_TOKEN', result.data.token, { secure: true, "max-age": 86400 });
-            dispatch('getCart');
+            await dispatch('getCart');
         }
     },
     async addExistCartProduct({ state, dispatch }, cartProductData) {
