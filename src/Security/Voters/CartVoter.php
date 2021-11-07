@@ -91,19 +91,19 @@ class CartVoter extends Voter
      */
     private function canEdit(Cart $cart): bool
     {
-        $phpSessionId = $this->getPhpSessionId();
-
-        if (!$phpSessionId) {
-            return false;
-        }
-
         // если корзина еще не существует
         if (!$cart->getId()) {
             return true;
         }
 
+        $cartToken = $this->getCartToken();
+
+        if (!$cartToken) {
+            return false;
+        }
+
         // проверяем, что это корзина пользователя
-        return $cart->getSessionId() === $phpSessionId;
+        return $cart->getToken() === $cartToken;
     }
 
     /**
@@ -112,24 +112,24 @@ class CartVoter extends Voter
      */
     private function canDelete(Cart $cart): bool
     {
-        $phpSessionId = $this->getPhpSessionId();
+        $cartToken = $this->getCartToken();
 
-        if (!$phpSessionId || !$cart->getId()) {
+        if (!$cartToken || !$cart->getId()) {
             return false;
         }
 
         // проверяем, что это корзина пользователя
-        return $cart->getSessionId() === $phpSessionId;
+        return $cart->getToken() === $cartToken;
     }
 
     /**
      * @return string|null
      */
-    private function getPhpSessionId(): ?string
+    private function getCartToken(): ?string
     {
         return $this->requestStack
             ->getCurrentRequest()
             ->cookies
-            ->get('PHPSESSID');
+            ->get('CART_TOKEN');
     }
 }

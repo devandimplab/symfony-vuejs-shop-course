@@ -49,16 +49,9 @@ class Cart
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
-     * @Groups({"cart:list", "cart:item"})
+     * @Groups({"cart:list", "cart:item", "cart:list:write"})
      */
     private $token;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="orders")
-     *
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $owner;
 
     /**
      * @ORM\Column(type="datetime")
@@ -81,18 +74,6 @@ class Cart
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
-
-        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeInterface

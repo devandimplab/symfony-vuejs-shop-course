@@ -2,6 +2,7 @@ import axios from "axios";
 import {StatusCodes} from "http-status-codes";
 import {apiConfig, apiConfigPatch} from "../../../../../utils/settings";
 import {concatUrlByParams} from "../../../../../utils/url-generator";
+import {setCookie} from "../../../../../utils/cookie-manager";
 
 function getAlertStructure() {
     return {
@@ -21,7 +22,11 @@ const state = () => ({
             apiCartProduct: window.staticStore.urlCartProduct,
             apiOrder: window.staticStore.urlOrder,
             viewProduct: window.staticStore.urlViewProduct,
+            loginPage: window.staticStore.urlLoginPage,
             assetImageProducts: window.staticStore.urlAssetImageProducts,
+        },
+        user: {
+            isLoggedIn: window.staticStore.isUserLoggedIn
         }
     }
 });
@@ -112,6 +117,7 @@ const actions = {
         const result = await axios.post(url, data, apiConfig);
 
         if (result.data && result.status === StatusCodes.CREATED) {
+          setCookie('CART_TOKEN', result.data.token, { secure: true, "max-age": 0 });
           commit('setAlert', {
               type: 'success',
               message: 'Thank you for your purchase! Our manager will contact with you in 24 hours.'

@@ -10,9 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class SetCartSessionIdSubscriber implements EventSubscriberInterface
+class SetCartTokenSubscriber implements EventSubscriberInterface
 {
-    public function setSessionId(ViewEvent $event)
+    public function setCartTokenToCart(ViewEvent $event)
     {
         $cart = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
@@ -28,15 +28,14 @@ class SetCartSessionIdSubscriber implements EventSubscriberInterface
         }
 
         $cart->setToken($cartToken);
-        dd($event->getResponse(), $cart);
     }
 
     public static function getSubscribedEvents()
     {
         return [
             KernelEvents::VIEW => [
-                'setSessionId', EventPriorities::PRE_WRITE
-            ]
+                'setCartTokenToCart', EventPriorities::PRE_WRITE,
+            ],
         ];
     }
 }
