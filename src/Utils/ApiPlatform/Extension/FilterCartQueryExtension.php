@@ -60,10 +60,10 @@ class FilterCartQueryExtension implements QueryCollectionExtensionInterface, Que
         $rootAlias = $queryBuilder->getRootAliases()[0];
 
         $request = Request::createFromGlobals();
-        $cartToken = $request->cookies->get("CART_TOKEN");
+        $phpSessId = $request->cookies->get("PHPSESSID");
 
         $queryBuilder->andWhere(
-            sprintf("%s.token = '%s'", $rootAlias, $cartToken)
+            sprintf("%s.sessionId = '%s'", $rootAlias, $phpSessId)
         );
     }
 
