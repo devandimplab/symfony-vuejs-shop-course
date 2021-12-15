@@ -78,6 +78,7 @@ const actions = {
 
         if (result.status === StatusCodes.NO_CONTENT) {
             commit('setCart', {});
+            setCookie('CART_TOKEN', result.data.token, { secure: true, "max-age": 0 });
         }
     },
     async removeCartProduct({ state, commit, dispatch }, cartProductId) {
@@ -117,7 +118,6 @@ const actions = {
         const result = await axios.post(url, data, apiConfig);
 
         if (result.data && result.status === StatusCodes.CREATED) {
-          setCookie('CART_TOKEN', result.data.token, { secure: true, "max-age": 0 });
           commit('setAlert', {
               type: 'success',
               message: 'Thank you for your purchase! Our manager will contact with you in 24 hours.'
