@@ -5,6 +5,7 @@ import {concatUrlByParams} from "../../../../../utils/url-generator";
 
 const state = () => ({
     cart: {},
+    isLoading: false,
 
     staticStore: {
         url: {
@@ -46,6 +47,7 @@ const actions = {
             && result.status === StatusCodes.OK
         ) {
             commit('setCart', result.data["hydra:member"][0]);
+            commit('setIsLoading', false);
         } else {
             dispatch('createCart');
         }
@@ -75,14 +77,20 @@ const actions = {
             dispatch('getCart');
         }
     },
-    addCartProduct({ state, dispatch }, productData) {
+    addCartProduct({ state, commit, dispatch }, productData) {
         if (!productData.quantity) {
             productData.quantity = 1;
+        }
+
+        if (state.isLoading) {
+            return;
         }
 
         const existCartProduct = state.cart.cartProducts.find(
             cartProduct => cartProduct.product.uuid === productData.uuid
         );
+
+        commit('setIsLoading', true);
 
         if (existCartProduct) {
             let newQuantity = existCartProduct.quantity + productData.quantity;
@@ -144,6 +152,9 @@ const mutations = {
     setCart(state, cart) {
         state.cart = cart;
     },
+    setIsLoading(state, isLoading) {
+        state.isLoading = isLoading;
+    }
 };
 
 export default {
