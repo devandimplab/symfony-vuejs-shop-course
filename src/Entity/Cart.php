@@ -47,11 +47,11 @@ class Cart
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      *
-     * @Groups({"cart:list", "cart:item"})
+     * @Groups({"cart:list", "cart:item", "cart:list:write"})
      */
-    private $sessionId;
+    private $token;
 
     /**
      * @ORM\Column(type="datetime")
@@ -76,18 +76,6 @@ class Cart
         return $this->id;
     }
 
-    public function getSessionId(): ?string
-    {
-        return $this->sessionId;
-    }
-
-    public function setSessionId(string $sessionId): self
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -96,6 +84,18 @@ class Cart
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }

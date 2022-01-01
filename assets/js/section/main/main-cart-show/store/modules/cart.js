@@ -2,6 +2,7 @@ import axios from "axios";
 import {StatusCodes} from "http-status-codes";
 import {apiConfig, apiConfigPatch} from "../../../../../utils/settings";
 import {concatUrlByParams} from "../../../../../utils/url-generator";
+import {setCookie} from "../../../../../utils/cookie-manager";
 
 function getAlertStructure() {
     return {
@@ -77,6 +78,7 @@ const actions = {
 
         if (result.status === StatusCodes.NO_CONTENT) {
             commit('setCart', {});
+            setCookie('CART_TOKEN', result.data.token, { secure: true, "max-age": 0 });
         }
     },
     async removeCartProduct({ state, commit, dispatch }, cartProductId) {

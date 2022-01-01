@@ -2,6 +2,7 @@ import axios from "axios";
 import {StatusCodes} from "http-status-codes";
 import {apiConfig, apiConfigPatch} from "../../../../../utils/settings";
 import {concatUrlByParams} from "../../../../../utils/url-generator";
+import {setCookie} from "../../../../../utils/cookie-manager";
 
 const state = () => ({
     cart: {},
@@ -77,7 +78,11 @@ const actions = {
             dispatch('getCart');
         }
     },
-    addCartProduct({ state, commit, dispatch }, productData) {
+    async addCartProduct({ state, commit, dispatch }, productData) {
+        if (!state.cart.cartProducts) {
+            await dispatch('createCart');
+        }
+
         if (!productData.quantity) {
             productData.quantity = 1;
         }
@@ -114,7 +119,9 @@ const actions = {
         const result = await axios.post(url, {}, apiConfig);
 
         if (result.data && result.status === StatusCodes.CREATED) {
-            dispatch('getCart');
+            // устанавливаем срок жизни 1 день
+            setCookie('CART_TOKEN', result.data.token, { secure: true, "max-age": 86400 });
+            await dispatch('getCart');
         }
     },
     async addExistCartProduct({ state, dispatch }, cartProductData) {

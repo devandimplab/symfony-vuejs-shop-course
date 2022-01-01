@@ -12,9 +12,10 @@
     "section-admin": {
       "js": [
         "/build/runtime.24085de5.js",
-        "/build/86.554d4d28.js",
-        "/build/104.f5f92571.js",
-        "/build/section-admin.7b8e602a.js"
+        "/build/631.4949dfd6.js",
+        "/build/416.05fe7428.js",
+        "/build/981.87e4233f.js",
+        "/build/section-admin.a68b1c70.js"
       ],
       "css": [
         "/build/section-admin.effc4a58.css"
@@ -23,25 +24,27 @@
     "appAdminOrder": {
       "js": [
         "/build/runtime.24085de5.js",
-        "/build/86.554d4d28.js",
+        "/build/631.4949dfd6.js",
         "/build/255.ff6ab00e.js",
-        "/build/appAdminOrder.836d6945.js"
+        "/build/appAdminOrder.acbea6f3.js"
       ]
     },
     "appMainCartShow": {
       "js": [
         "/build/runtime.24085de5.js",
-        "/build/86.554d4d28.js",
+        "/build/631.4949dfd6.js",
         "/build/255.ff6ab00e.js",
-        "/build/appMainCartShow.f683e12f.js"
+        "/build/416.05fe7428.js",
+        "/build/appMainCartShow.e2dc8675.js"
       ]
     },
     "appMainMenuCart": {
       "js": [
         "/build/runtime.24085de5.js",
-        "/build/86.554d4d28.js",
+        "/build/631.4949dfd6.js",
         "/build/255.ff6ab00e.js",
-        "/build/appMainMenuCart.8f86723b.js"
+        "/build/416.05fe7428.js",
+        "/build/appMainMenuCart.fc5844c7.js"
       ]
     },
     "email": {

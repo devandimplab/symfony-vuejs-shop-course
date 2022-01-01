@@ -33,12 +33,12 @@ class OrderManager extends AbstractBaseManager
     }
 
     /**
-     * @param string $sessionId
+     * @param string $cartToken
      * @param User $user
      */
-    public function createOrderFromCartBySessionId(string $sessionId, User $user)
+    public function createOrderFromCartByToken(string $cartToken, User $user)
     {
-        $cart = $this->cartManager->getRepository()->findOneBy(['sessionId' => $sessionId]);
+        $cart = $this->cartManager->getRepository()->findOneBy(['token' => $cartToken]);
         if ($cart) {
             $this->createOrderFromCart($cart, $user);
         }
